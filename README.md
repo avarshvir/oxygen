@@ -1,5 +1,5 @@
 # Oxygen 
-An AI Software Development Company that locally runs on your own machine.
+An AI Software Development Company that locally runs virtually.
 
 ---
 
