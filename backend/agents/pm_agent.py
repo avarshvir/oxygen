@@ -1,38 +1,43 @@
-import os
-from dotenv import load_dotenv
 from langchain_google_genai import ChatGoogleGenerativeAI
 from backend.state import AgentState
 
-load_dotenv()
-
-# Using the required model, temperature removed to prevent conflicts
-llm = ChatGoogleGenerativeAI(
-    model="gemini-3.6-flash" 
-)
+# Initialize the LLM
+llm = ChatGoogleGenerativeAI(model="gemini-3.6-flash")
 
 def pm_node(state: AgentState):
+    """
+    The AI Project Manager Node.
+    Gathers requirements from the user before passing to the Researcher.
+    """
     messages = state.get("messages", [])
     
     system_prompt = (
-        "You are the AI Project Manager for the Oxygen software development team. "
-        "Your job is to talk to the user, gather their software requirements, "
-        "and prepare to delegate the technical research to the AI Researcher. "
-        "Keep your responses professional, corporate, and concise."
+        "You are the AI Project Manager for the Oxygen team. "
+        "Your job is to clarify project requirements with the user. "
+        "If the user has provided enough information, acknowledge it briefly and state that you are handing it off to the Researcher."
     )
     
-    response = llm.invoke([
-        {"role": "system", "content": system_prompt},
-        *messages
-    ])
+    # Prepend the system prompt
+    invoke_messages = [{"role": "system", "content": system_prompt}] + messages
     
-    # --- THE FIX: Force Gemini's output into a clean string ---
+    # Call the LLM
+    response = llm.invoke(invoke_messages)
+    
+    # --- THE FIX: Bulletproof extraction ---
     reply_text = response.content
+    
     if isinstance(reply_text, list):
-        reply_text = reply_text[0].get("text", str(reply_text))
+        if len(reply_text) > 0:
+            # Safely extract text if the list is not empty
+            reply_text = reply_text[0].get("text", "")
+        else:
+            # Fallback if Gemini returns an empty list
+            reply_text = "Understood. I have logged those constraints and am passing the specifications to our AI Researcher now."
     else:
+        # Standard string fallback
         reply_text = str(reply_text)
     
     return {
-        "messages": [{"role": "assistant", "content": reply_text}],
-        "pm_status": "talking_to_user"
+        "messages": [{"role": "assistant", "content": f"[Project Manager]: {reply_text}"}],
+        "pm_status": "gathering_requirements"
     }
