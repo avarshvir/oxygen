@@ -1,6 +1,15 @@
+import os
+from dotenv import load_dotenv
+
+# 1. THIS MUST BE AT THE VERY TOP! 
+# It loads your API key from the .env file before anything else happens.
+load_dotenv()
+
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect
 import uvicorn
 import json
+
+# 2. NOW it is safe to import the graph, because the API key is loaded!
 from backend.graph import app_graph 
 
 app = FastAPI()
