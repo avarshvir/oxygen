@@ -1,20 +1,25 @@
-from langchain_google_genai import ChatGoogleGenerativeAI
 from backend.state import AgentState
-
-# Initialize the LLM
-llm = ChatGoogleGenerativeAI(model="gemini-3.6-flash")
+from backend.llm_factory import get_llm
 
 def pm_node(state: AgentState):
     """
     The AI Project Manager Node.
     Gathers requirements from the user before passing to the Researcher.
     """
+    print("\n🚀 [Project Manager] is thinking...")
+    
+    # Instantiate LLM based on user config
+    llm = get_llm(state.get("config", {}))
+    
     messages = state.get("messages", [])
     
     system_prompt = (
         "You are the AI Project Manager for the Oxygen team. "
-        "Your job is to clarify project requirements with the user. "
-        "If the user has provided enough information, acknowledge it briefly and state that you are handing it off to the Researcher."
+        "Your ONLY job is to clarify project requirements with the user and manage the team. "
+        "CRITICAL INSTRUCTION: DO NOT WRITE CODE. DO NOT PROVIDE TECHNICAL SOLUTIONS. DO NOT OUTPUT HTML, CSS, JS, OR PYTHON. "
+        "If the user is providing initial requirements, acknowledge them briefly and state you are handing it off to the Researcher. "
+        "If the user is approving a technical proposal, acknowledge the approval and state you are handing it off to the Developer to begin coding. "
+        "If the user is asking for changes to the proposal or rejecting it, acknowledge the feedback and state you are sending it back to the Researcher."
     )
     
     # Prepend the system prompt
