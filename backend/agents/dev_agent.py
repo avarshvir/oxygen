@@ -1,20 +1,18 @@
-from langchain_google_genai import ChatGoogleGenerativeAI
 from backend.state import AgentState
-
-# Using the stable model
-llm = ChatGoogleGenerativeAI(
-    model="gemini-3.6-flash" 
-)
+from backend.llm_factory import get_llm
 
 def dev_node(state: AgentState):
     """
     The AI Developer Node.
     Reads the Researcher's technical proposal and writes the actual code.
     """
+    print("\n🚀 [AI Developer] is thinking...")
+    llm = get_llm(state.get("config", {}))
+    
     messages = state.get("messages", [])
     
     system_prompt = (
-        "You are the AI Senior Software Developer for the Oxygen team. "
+        "You are the AI Senior Software Developer named 'Bang' for the Oxygen team. "
         "Review the technical proposal provided by the AI Researcher. "
         "Write the core, foundational code required to start the project based exactly on their tech stack. "
         "Provide clean, well-commented code blocks. Address your response to the Tester."
