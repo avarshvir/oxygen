@@ -3,60 +3,103 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Oxygen AI Team</title>
-    <!-- Bootstrap CSS via CDN -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <title>Oxygen AI Workspace</title>
+    <!-- Modern Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css">
 </head>
-<body class="bg-light">
+<body>
 
-<div class="container-fluid h-100 p-3">
-    <div class="row h-100">
-        
+<div class="app-container">
+    <header class="app-header">
+        <div class="logo">
+            <span class="logo-icon">💨</span>
+            <h1>Oxygen</h1>
+        </div>
+        <div class="header-actions">
+            <div class="header-status">
+                <div class="pulse-indicator"></div>
+                <span>System Online</span>
+            </div>
+            <button id="settingsBtn" class="settings-btn">
+                ⚙️ Settings
+            </button>
+        </div>
+    </header>
+
+    <main class="app-content">
         <!-- LEFT PANEL: 2D Virtual Office Canvas -->
-        <div class="col-md-8 d-flex flex-column">
-            <div class="card shadow-sm flex-grow-1">
-                <div class="card-header bg-dark text-white">
-                    <h5 class="mb-0">🏢 Oxygen Virtual Office</h5>
-                </div>
-                <div class="card-body p-0 d-flex justify-content-center align-items-center bg-secondary">
-                    <!-- The game engine / pixel art will render inside this canvas -->
-                    <canvas id="officeCanvas" width="800" height="600"></canvas>
-                </div>
+        <section class="office-panel glass-panel">
+            <div class="panel-header">
+                <h2>Virtual Office</h2>
+                <span class="active-agent-badge" id="activeAgentBadge">Awaiting Input...</span>
             </div>
-        </div>
+            <div class="canvas-container" id="canvasContainer">
+                <canvas id="officeCanvas"></canvas>
+            </div>
+        </section>
 
-        <!-- RIGHT PANEL: Chat with Project Manager -->
-        <div class="col-md-4 d-flex flex-column">
-            <div class="card shadow-sm flex-grow-1 d-flex flex-column">
-                <div class="card-header bg-primary text-white">
-                    <h5 class="mb-0">💬 Chat with Project Manager</h5>
-                </div>
-                
-                <!-- Chat History Area -->
-                <div class="card-body overflow-auto chat-box" id="chatHistory">
-                    <div class="mb-2 text-start">
-                        <span class="badge bg-primary">Project Manager</span>
-                        <p class="border rounded p-2 mt-1 bg-light">Hello! I'm your AI Project Manager. What are we building today?</p>
+        <!-- RIGHT PANEL: Chat Interface -->
+        <section class="chat-panel glass-panel">
+            <div class="panel-header">
+                <h2>Project Manager</h2>
+            </div>
+            
+            <div class="chat-history custom-scrollbar" id="chatHistory">
+                <div class="message ai-message">
+                    <div class="message-header">
+                        <span class="agent-badge pm-badge">Project Manager</span>
                     </div>
-                </div>
-                
-                <!-- Input Area -->
-                <div class="card-footer">
-                    <div class="input-group">
-                        <textarea class="form-control" id="userInput" rows="2" placeholder="Describe your project requirements..."></textarea>
-                        <button class="btn btn-primary" id="sendBtn">Send</button>
+                    <div class="message-bubble">
+                        Hello! I'm your AI Project Manager. What are we building today?
                     </div>
                 </div>
             </div>
-        </div>
+            
+            <div class="chat-input-area">
+                <div class="input-wrapper">
+                    <textarea id="userInput" placeholder="Describe your project requirements..." rows="2"></textarea>
+                    <button id="sendBtn" class="primary-btn">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+                    </button>
+                </div>
+            </div>
+        </section>
+    </main>
+</div>
 
+<!-- Settings Modal Overlay -->
+<div id="settingsModal" class="modal-overlay hidden">
+    <div class="modal-content glass-panel">
+        <div class="modal-header">
+            <h2>⚙️ System Configuration</h2>
+            <button id="closeSettingsBtn" class="close-btn">&times;</button>
+        </div>
+        <div class="modal-body">
+            <div class="form-group">
+                <label for="llmProvider">AI Provider</label>
+                <select id="llmProvider" class="styled-select">
+                    <option value="gemini">Google Gemini (Cloud)</option>
+                    <option value="ollama">Ollama (Local)</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="llmModel">Model Name</label>
+                <input type="text" id="llmModel" class="styled-input" value="gemini-1.5-flash" placeholder="e.g., gemini-1.5-flash or llama3.1">
+            </div>
+            
+            <div class="form-group" id="apiKeyGroup">
+                <label for="llmApiKey">API Key</label>
+                <input type="password" id="llmApiKey" class="styled-input" placeholder="Leave blank to use .env key">
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button id="saveSettingsBtn" class="primary-btn save-btn">Save Configuration</button>
+        </div>
     </div>
 </div>
 
-<!-- Bootstrap JS (Optional, but good for interactive components if needed later) -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-<!-- Your custom JS -->
 <script src="js/main.js"></script>
 <script src="js/socket.js"></script>
 </body>
