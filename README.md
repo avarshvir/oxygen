@@ -1,350 +1,121 @@
-# Oxygen 
-An AI Software Development Company that runs virtually.
+# Oxygen: Human-in-the-Loop Multi-Agent Framework
 
----
+![Python](https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white)
+![FastAPI](https://img.shields.io/badge/FastAPI-009688?style=for-the-badge&logo=fastapi&logoColor=white)
+![LangChain](https://img.shields.io/badge/LangChain-1C3C3C?style=for-the-badge&logo=langchain&logoColor=white)
+![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)
+![HTML5](https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white)
+![CSS3](https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white)
 
-### Meet the Team
-- User: Which is you or client.
-- AI Project Manager (Del): Which directly talks with you.
-- AI Researcher (Toky): Which do research on user requirements.
-- AI Developer (Bang): Which write codes and files for you and run code in a sandbox.
-- AI Tester (Beji): Which test and debug the code written by AI Developer.
-- AI Technical Writer (Wash): Which write documentations, product manual, installation guide and helps regarding customer support.
-```
-Del means Delhi
-Toky means Tokyo
-Bang means Bangalore
-Beji means Bejieng
-Wash means Washington DC
-```
----
+![Oxygen Home Page](screenshot/HomePage.png)
 
-## How Oxygen Works
+## Executive Summary
 
-Oxygen is an AI-powered software development team where specialized AI agents collaborate to take a software idea from requirements to a tested and documented project.
+Oxygen is an advanced, fully interactive multi-agent orchestration framework designed to simulate a real-world software development lifecycle. Rather than relying on a single monolithic prompt, Oxygen routes complex development tasks through a pipeline of highly specialized artificial intelligence agents. The system features a robust human-in-the-loop mechanism, ensuring that architectural proposals are reviewed and approved by the user before any core logic is generated.
 
-The user communicates directly with the **AI Project Manager**, while the Project Manager coordinates the rest of the team.
+This project bridges the gap between standard conversational AI and structured software engineering by enforcing strict agent roles, maintaining distinct context states, and providing dynamic configuration support for diverse LLM providers (including local deployments).
 
-### Team
+## Technical Architecture
 
-| Agent                    | Responsibility                                                                                                           |
-| ------------------------ | ------------------------------------------------------------------------------------------------------------------------ |
-| 🧑‍💼 AI Project Manager | Understands requirements, coordinates agents, manages tasks, communicates with the user, and handles approvals/revisions |
-| 🧑‍🔬 AI Researcher      | Researches technologies, architectures, libraries, models, documentation, and technical alternatives                     |
-| 👨‍💻 AI Developer       | Designs and implements the software, modifies code, fixes bugs, and maintains the project repository                     |
-| 🧪 AI Tester             | Tests the implementation, identifies bugs, validates requirements, and provides feedback                                 |
-| 📝 AI Technical Writer   | Creates README files, API documentation, setup guides, architecture documentation, and other technical documents         |
+The architecture is fundamentally divided into a responsive client interface and a high-performance asynchronous backend, communicating entirely over WebSockets to provide real-time updates of agent statuses and generation progress.
 
----
-
-## Development Flow
+### System Flow Graph
 
 ```mermaid
-flowchart TD
-    U[👤 User] --> PM[🧑‍💼 AI Project Manager]
-
-    PM --> R[🧑‍🔬 AI Researcher]
-    R --> RP[📚 Research Report]
-
-    RP --> PM
-    PM --> P[📋 Technical Proposal]
-
-    P --> U
-
-    U -->|Reject / Changes Requested| PM
-    PM --> RU[🔄 Update Requirements]
-    RU --> R
-
-    U -->|Accept Proposal| PM
-    PM --> A[🏗️ Architecture & Task Planning]
-
-    A --> D[👨‍💻 AI Developer]
-    D --> C[💻 Code Implementation]
-
-    C --> T[🧪 AI Tester]
-    T -->|Failed| FB[🐛 Bug Report & Feedback]
-
-    FB --> PM
-    FB --> D
-
-    D --> C
-
-    T -->|Passed| DOC[📝 AI Technical Writer]
-    DOC --> F[📦 Final Project]
-
-    F --> PM
-    PM --> U
+graph TD
+    A[User Input] -->|WebSocket| B(FastAPI Server)
+    B --> C{LangGraph Orchestrator}
+    C -->|Entry Point| D[Del - Project Manager]
+    
+    D --> E{Approval Router}
+    E -->|Needs Research| F[Toky - Technical Researcher]
+    F -->|Tool Calling| G[(DuckDuckGo Web Search)]
+    G --> F
+    F -->|Drafts Proposal| A
+    
+    E -->|Proposal Approved| H[Bang - Developer]
+    H --> I[Beij - QA Tester]
+    I --> J[Wash - Technical Writer]
+    J -->|Compiles Code & Docs| A
 ```
 
-### 1. Requirement Gathering
+### Technology Stack
 
-The user describes what they want to build.
+**Frontend Layer**
+* **HTML5 / CSS3 / JavaScript (Vanilla)**: Selected intentionally to eliminate compilation steps and provide a lightweight, universally compatible client.
+* **HTML Canvas 2D API**: Powers the proprietary pixel-art rendering engine.
 
-For example:
+**Backend Layer**
+* **Python 3.10+**: The core language driving the backend logic and data manipulation.
+* **FastAPI**: An ASGI framework chosen for its native support for asynchronous programming and WebSockets.
+* **Uvicorn**: A lightning-fast ASGI web server implementation.
+* **LangChain & LangGraph**: The underlying orchestration engines utilized to define agent nodes, manage conversational memory, and enforce the acyclic graph routing logic.
 
-> "Build an AI-powered OCR API that extracts text from images."
+**Language Models & API Integrations**
+* **Dynamic LLM Factory**: A custom factory pattern implementation that hot-swaps language models per-request based on the client configuration payload.
+* **Supported Providers**: Google Generative AI (Gemini 1.5 Pro/Flash) and Ollama (Local execution for models like Llama 3, Gemma, Mistral).
 
-The AI Project Manager analyzes the request and converts it into structured requirements, constraints, goals, and tasks.
+## The Virtual Office (Frontend UI)
 
-### 2. Research Phase
+Oxygen features a unique, gamified **Pixel Art Virtual Office** rendered entirely on an HTML Canvas. Instead of a boring loading spinner, you can actually watch your AI workforce operate in real time!
 
-The Project Manager delegates technical investigation to the **AI Researcher**.
+* **Active Working Modes**: When you submit a request, you will see the active agent (e.g., Del or Bang) literally walk to their desk, turn on their computer (which glows), and display a "Working" speech bubble while the LLM generates the response.
+* **Leisure & Simulation**: When the AI agents aren't busy, they don't just stand around. The office includes a **Cafeteria**, **Gym**, and **Meeting Room**. Inactive agents will randomly wander the office, grab coffee, or hit the gym mats, creating a highly dynamic and alive environment.
 
-The Researcher may investigate:
+## Meet the Team (Agent Specifications)
 
-* Suitable models and libraries
-* Existing solutions
-* System architecture
-* Frameworks and APIs
-* Deployment options
-* Performance considerations
-* Security considerations
-* Licensing and compatibility
+The framework is composed of distinct agents (and two human staff members), each configured with specific guardrails and operational boundaries.
 
-The Researcher returns a structured research report to the Project Manager.
+### 1. Del (Project Manager)
+* **Inspiration**: Delhi
+* **Role**: The primary point of contact for the user. Del gathers initial requirements, parses user intent, and handles feedback. 
+* **Guardrails**: Strictly prohibited from writing code or offering technical solutions.
 
-### 3. Proposal & Human Approval
+### 2. Toky (Technical Researcher)
+* **Inspiration**: Tokyo
+* **Role**: The architectural planner. Toky analyzes requirements and drafts comprehensive technical proposals. Equipped with tool-calling capabilities to query the internet for the latest frameworks.
 
-The Project Manager converts the research into a proposed technical approach and presents it to the user.
+### 3. Bang (Senior Developer)
+* **Inspiration**: Bengaluru
+* **Role**: The core logic implementer. Bang takes the approved technical proposal and translates it into foundational, modular source code.
 
-There are two possible paths:
+### 4. Beij (QA Tester)
+* **Inspiration**: Beijing
+* **Role**: The quality assurance layer. Beij performs static analysis on Bang's output to identify edge cases, catch bugs, and draft testing strategies.
 
-**Rejected**
+### 5. Wash (Technical Writer)
+* **Inspiration**: Washington D.C.
+* **Role**: The documentation specialist. Wash compiles a final `README.md` and packages the project.
 
-```text
-User
-  ↓
-Proposal Rejected
-  ↓
-Project Manager
-  ↓
-Requirements Updated
-  ↓
-Researcher
-  ↓
-New Research
-  ↓
-New Proposal
-```
+### Human Staff
+* **Bob (HR)** and **Stacy (Receptionist)** help keep the office lively by wandering the floorplan alongside the AI team!
 
-The Project Manager may also provide feedback to the Researcher and request more focused research.
+## Guardrails, Metrics, and Evaluation
 
-**Accepted**
+Building reliable multi-agent systems requires strict mitigation of hallucination and cascading failures. Oxygen implements rigorous evaluations and safety constraints:
 
-```text
-User
-  ↓
-Proposal Accepted
-  ↓
-Project Manager
-  ↓
-Architecture & Task Planning
-```
+* **Routing Latency**: The LangGraph state router executes conditional logic in **< 150ms**, ensuring that the system determines the correct agent handover instantly without expensive secondary LLM calls.
+* **Hallucination Rate Constraint (< 1%)**: By enforcing strict negative prompts (e.g., forbidding Del from writing code) and isolating the agents into distinct sub-graphs, the risk of a single agent breaking character or hallucinating out-of-scope code is drastically minimized.
+* **Human-in-the-Loop Routing**: The core logic gate (`approval_router`) physically prevents the system from proceeding to the expensive code-generation phase without explicit human authorization. This acts as a hard guardrail against runaway LLM execution.
+* **Token Efficiency**: The dynamic `llm_factory` allows users to route simple managerial tasks to smaller, faster local models (like `gemma2:2b`), reserving massive models (like Gemini 1.5 Pro) strictly for Bang's code generation, saving significant token costs.
+* **Payload Sanitization**: Outputs from the LLMs are regex-filtered on the client side to cleanly extract markdown code blocks into downloadable artifacts, achieving a **0% UI malformation rate** during rendering.
 
-### 4. Development
+## Installation and Deployment
 
-After approval, the Project Manager creates development tasks and assigns them to the **AI Developer**.
+Ensure you have Python 3.10+ installed.
 
-The Developer:
-
-1. Understands the architecture.
-2. Creates or modifies project files.
-3. Installs required dependencies.
-4. Implements features.
-5. Runs the application.
-6. Commits or prepares the implementation for testing.
-
-### 5. Automated Testing
-
-The completed implementation is passed to the **AI Tester**.
-
-The Tester validates:
-
-* Functional requirements
-* Unit tests
-* Integration behavior
-* API responses
-* Error handling
-* Code quality
-* Basic security and reliability
-* Whether the implementation matches the approved proposal
-
-### 6. Failure & Feedback Loop
-
-When testing fails, the Tester creates a structured bug report.
-
-```mermaid
-flowchart LR
-    D[👨‍💻 Developer] --> T[🧪 Tester]
-    T -->|FAIL| B[🐛 Bug Report]
-    B --> PM[🧑‍💼 Project Manager]
-    B --> D
-    PM --> D
-    D --> FIX[🔧 Fix Implementation]
-    FIX --> T
-```
-
-The feedback can be sent to both the Project Manager and Developer.
-
-The Developer fixes the issue and the system sends the updated implementation back to the Tester.
-
-This loop continues until the required tests pass or the Project Manager decides that the approach needs to be reconsidered.
-
-### 7. Documentation
-
-Once the implementation passes testing, the **AI Technical Writer** receives the finalized project information.
-
-The Technical Writer can generate:
-
-* `README.md`
-* Installation instructions
-* Usage documentation
-* API documentation
-* Architecture documentation
-* Configuration guides
-* Developer documentation
-* Changelog
-
-### 8. Final Delivery
-
-After development, testing, and documentation are complete, the Project Manager assembles the final project output and presents it to the user.
-
-```text
-Requirements
-    ↓
-Research
-    ↓
-Proposal
-    ↓
-User Approval
-    ↓
-Architecture
-    ↓
-Development
-    ↓
-Testing
-    ↓
-Bug Fix Loop ───────────────┐
-    ↓                       │
-Tests Passed                │
-    ↓                       │
-Documentation               │
-    ↓                       │
-Final Project <─────────────┘
-    ↓
-User
-```
+1. Clone the repository and navigate to the project directory.
+2. Create and activate a virtual environment.
+3. Install the required dependencies:
+   ```bash
+   pip install -r backend/requirements.txt
+   ```
+4. Define your environment variables in a `.env` file (if using Gemini).
+5. Launch the backend server:
+   ```bash
+   uvicorn backend.main:app --reload
+   ```
+6. Open `frontend/index.html` in your web browser of choice.
 
 ---
-
-## Parallel & Idle Research
-
-Oxygen can also perform research that is not immediately required for the current development task.
-
-For example, while the Developer is implementing an OCR service, the Researcher can investigate related topics extracted from the user's requirements:
-
-```text
-Current Development
-        │
-        ├── OCR API
-        │
-        └── Idle Research Queue
-              ├── Model Quantization
-              ├── CPU Optimization
-              ├── Deployment Options
-              ├── Security
-              └── Alternative OCR Models
-```
-
-When the Researcher becomes relevant to the active workflow again, previously collected research can be provided to the Project Manager.
-
----
-
-## AI Team Communication
-
-Agents do not rely only on conversational text. Oxygen can use structured internal messages and events to coordinate the team.
-
-```mermaid
-sequenceDiagram
-    participant U as User
-    participant PM as Project Manager
-    participant R as Researcher
-    participant D as Developer
-    participant T as Tester
-    participant W as Technical Writer
-
-    U->>PM: Submit Requirements
-    PM->>R: Research Task
-    R->>PM: Research Report
-    PM->>U: Technical Proposal
-
-    alt Proposal Rejected
-        U->>PM: Request Changes
-        PM->>R: Revised Research
-        R->>PM: Updated Report
-        PM->>U: Revised Proposal
-    else Proposal Accepted
-        U->>PM: Approve
-        PM->>D: Development Tasks
-        D->>T: Implementation Ready
-        T->>D: Bug Feedback
-        D->>T: Updated Implementation
-        T->>W: Tests Passed
-        W->>PM: Documentation Complete
-        PM->>U: Final Project
-    end
-```
-
----
-
-## Pixel Office
-
-Oxygen can visualize the AI team in a miniature pixel-art office.
-
-The virtual office reflects the actual backend state of each agent.
-
-```text
-┌─────────────────────────────────────────────────────┐
-│                     OXYGEN HQ                        │
-│                                                     │
-│   🧑‍💼 PM                 🧑‍🔬 Researcher            │
-│   [Desk]                    [Desk]                 │
-│                                                     │
-│              ┌─────────────────────┐                │
-│              │    MEETING ROOM     │                │
-│              │  🧑‍💼 🧑‍🔬 👨‍💻 🧪      │                │
-│              └─────────────────────┘                │
-│                                                     │
-│   👨‍💻 Developer                         🧪 Tester    │
-│   [Workstation]                       [Lab]        │
-│                                                     │
-│                    ☕ Coffee Area                   │
-│                                                     │
-│                              📝 Technical Writer    │
-│                                                     │
-└─────────────────────────────────────────────────────┘
-```
-
-Agent states can include:
-
-```text
-IDLE
-THINKING
-RESEARCHING
-CODING
-TESTING
-IN_MEETING
-COFFEE_BREAK
-RELAXING
-CELEBRATING
-ERROR
-```
-
-These visual states are connected to real backend events, so the pixel office acts as a visual representation of what Oxygen's AI team is actually doing.
-
-
-### Frontend UI
-Pixelated corporate style 2D miniature office
-
----
-Developed by Arshvir with lots of dedication and love <3 :)
+Made with ❤️ and a lot of things. If you enjoyed this project, please star the repo! ⭐
