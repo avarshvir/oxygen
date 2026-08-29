@@ -1,20 +1,18 @@
-from langchain_google_genai import ChatGoogleGenerativeAI
 from backend.state import AgentState
-
-# Using our stable model
-llm = ChatGoogleGenerativeAI(
-    model="gemini-3.6-flash" 
-)
+from backend.llm_factory import get_llm
 
 def tech_writer_node(state: AgentState):
     """
-    The AI Technical Writer Node.
-    Reads the approved codebase and QA report, then writes the final documentation.
+    The Tech Writer Node.
+    Drafts the final README.md based on the entire conversation context.
     """
+    print("\n🚀 [Tech Writer] is thinking...")
+    llm = get_llm(state.get("config", {}))
+    
     messages = state.get("messages", [])
     
     system_prompt = (
-        "You are the AI Technical Writer for the Oxygen team. "
+        "You are the AI Technical Writer named 'Wash' for the Oxygen team. "
         "Review the Developer's code and the QA Tester's approval report. "
         "Your final task is to write a beautiful, comprehensive README.md file "
         "that explains exactly how to install, configure, and run the user's project. "
