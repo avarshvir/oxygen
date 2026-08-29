@@ -9,6 +9,9 @@ class AgentState(TypedDict):
     # Chat history and internal agent dialogue
     messages: Annotated[list[dict], add_messages]
     
+    # User's LLM Configuration
+    config: dict
+    
     # Software Development Lifecycle Data
     project_requirements: str
     proposal_draft: str
